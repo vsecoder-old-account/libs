@@ -1,0 +1,11 @@
+{
+  "name": "lib",
+  "version": "10.11.2020",
+  "description": "lib js vsevolodhtml",
+  "repository": {
+    "url": "https://github.com/htmlcssphpjs/libs"
+  },
+  "author": "vsevolodhtml",
+  "license": "MIT",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
+}
