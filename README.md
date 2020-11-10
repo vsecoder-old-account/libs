@@ -19,4 +19,5 @@
 
 ```bash
   npm install libvh
+     [========] 100%
 ```
