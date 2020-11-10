@@ -34,7 +34,7 @@
 
 #### Code
 
-```
+```javascript
 globalThis.$ = {
 	find: function (dom) {
 	  return document.querySelector(dom);
