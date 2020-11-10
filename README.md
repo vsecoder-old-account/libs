@@ -18,6 +18,6 @@
 #### Download
 
 ```bash
-  npm install libvh
+  npm install htmlcssphpjs/libs
      [========] 100%
 ```
