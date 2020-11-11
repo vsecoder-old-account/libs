@@ -63,5 +63,40 @@ globalThis.$ = {
   },
   add: function (dom, cl) {
     document.querySelector(dom).classList.add(cl);
+  },
+  rnd: function (data) {
+    var template = document.body.innerHTML;
+    for (var property in data) {
+        if (data.hasOwnProperty(property)) {
+            var search = new RegExp('{' + property + '}', 'gi');
+            template = template.replace(search, data[property]);
+        }
+    }
+    return template;
+  },
+  js: function (src) {
+    let script = document.createElement('script');
+    script.src = src;
+    script.async = false;
+    if (document.head) {
+      document.head.appendChild(script);
+    } else if (document.body) {
+      document.body.appendChild(script);
+    } else {
+      console.warn('А куда скрипт добавить? не head, не  body...');
+    }
+  },
+  css: function (src) {
+    let link = document.createElement('link');
+    link.href = src;
+    link.rel  = 'stylesheet';
+    link.type = 'text/css';
+    if (document.head) {
+      document.head.appendChild(link);
+    } else if (document.body) {
+      document.body.appendChild(link);
+    } else {
+      console.warn('А куда css добавить? не head, не  body...');
+    }
   }
 };
