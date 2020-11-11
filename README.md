@@ -24,6 +24,15 @@
     $.text('.btn', 'alert =)');
 	//добовляем класс
     $.add('.btn', 'btnf');
+    //добавляем скрипт, стили
+    $.js('test.js');
+    $.css('test.css');
+    //заменяем {lib} на $lib
+    document.body.innerHTML = $.rnd({
+      lib: "$lib",
+      title: "JS",
+      description: "Is top"
+    });
 
 #### Download
 
