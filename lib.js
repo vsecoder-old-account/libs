@@ -98,5 +98,38 @@ globalThis.$ = {
     } else {
       console.warn('А куда css добавить? не head, не  body...');
     }
+  },
+  drag: function (dom) {
+    var drag = document.querySelector(dom);
+    drag.onmousedown = function(e) {
+      var coords = getCoords(drag);
+      var shiftX = e.pageX - coords.left;
+      var shiftY = e.pageY - coords.top;
+      drag.style.position = 'absolute';
+      document.body.appendChild(drag);
+      moveAt(e);
+      drag.style.zIndex = 1000; // над другими элементами
+      function moveAt(e) {
+        drag.style.left = e.pageX - shiftX + 'px';
+        drag.style.top = e.pageY - shiftY + 'px';
+      }
+      document.onmousemove = function(e) {
+        moveAt(e);
+      };
+      drag.onmouseup = function() {
+        document.onmousemove = null;
+        drag.onmouseup = null;
+      };
+    }
+    drag.ondragstart = function() {
+      return false;
+    };
+    function getCoords(elem) {   // кроме IE8-
+      var box = elem.getBoundingClientRect();
+      return {
+        top: box.top + pageYOffset,
+        left: box.left + pageXOffset
+      };
+    }
   }
 };
