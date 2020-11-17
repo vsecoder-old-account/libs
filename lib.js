@@ -1,7 +1,9 @@
+var rngnmb = 0;
+console.log('%c%s', 'color: yellow; font: 2.2rem/1 Tahoma;', '$lib');
 globalThis.$ = {
-	find: function (dom) {
-	  return document.querySelector(dom);
-	},
+  find: function (dom) {
+    return document.querySelector(dom);
+  },
   rem: function (dom) {
     document.querySelector(dom).remove();
   },
@@ -28,32 +30,32 @@ globalThis.$ = {
     }
   },
   log: function (text) {
-	  console.log('%c%s', 'color: black; font: 1.2rem/1 Tahoma;', text);
+    console.log('%c%s', 'color: black; font: 1.2rem/1 Tahoma;', text);
   },
   info: function (dom) {
-	  console.log('%O', document.querySelector(dom));
+    console.log('%O', document.querySelector(dom));
   },
   logimg: function (i,s,c) {
-	  const r = new FileReader();
-        if(s==undefined){s=100};
-	  r.addEventListener('load', function () {
-	    const o ='background: url(\'' + r.result + '\') left top no-repeat; font-size: '+s+'px; background-size: contain; background-color:'+c;
-	    console.log('%c     ',o);
-	  },false);
-	  fetch(i)
-	    .then(r=>r.blob())
-	    .then(b=>{
-	  	if(b.type.indexOf('image')===0){
-	  	  if(b.size>8192&& navigator.userAgent.indexOf('Firefox')>0){
-	  		throw new Error('Изображение СЛИШКОМ большое.');
-	  	  }
-	  	  return b;
-	  	}else{
-	  	  throw new Error('Хм... Неправильный адрес.');
-	  	}
-	    })
-	    .then(i=>r.readAsDataURL(i))
-	    .catch(e=>console.warn(e.message));
+  const r = new FileReader();
+  if(s==undefined){s=100};
+  r.addEventListener('load', function () {
+    const o ='background: url(\'' + r.result + '\') left top no-repeat; font-size: '+s+'px; background-size: contain; background-color:'+c;
+    console.log('%c     ',o);
+  },false);
+  fetch(i)
+    .then(r=>r.blob())
+    .then(b=>{
+    if(b.type.indexOf('image')===0){
+      if(b.size>8192&& navigator.userAgent.indexOf('Firefox')>0){
+      throw new Error('Изображение СЛИШКОМ большое.');
+      }
+      return b;
+    }else{
+      throw new Error('Хм... Неправильный адрес.');
+    }
+    })
+    .then(i=>r.readAsDataURL(i))
+    .catch(e=>console.warn(e.message));
 	},
   click: function (dom) {
     document.querySelector(dom).click();
@@ -67,10 +69,10 @@ globalThis.$ = {
   rnd: function (data) {
     var template = document.body.innerHTML;
     for (var property in data) {
-        if (data.hasOwnProperty(property)) {
-            var search = new RegExp('{' + property + '}', 'gi');
-            template = template.replace(search, data[property]);
-        }
+      if (data.hasOwnProperty(property)) {
+        var search = new RegExp('{' + property + '}', 'gi');
+        template = template.replace(search, data[property]);
+      }
     }
     return template;
   },
@@ -99,37 +101,40 @@ globalThis.$ = {
       console.warn('А куда css добавить? не head, не  body...');
     }
   },
-  drag: function (dom) {
-    var drag = document.querySelector(dom);
-    drag.onmousedown = function(e) {
-      var coords = getCoords(drag);
-      var shiftX = e.pageX - coords.left;
-      var shiftY = e.pageY - coords.top;
-      drag.style.position = 'absolute';
-      document.body.appendChild(drag);
-      moveAt(e);
-      drag.style.zIndex = 1000; // над другими элементами
-      function moveAt(e) {
-        drag.style.left = e.pageX - shiftX + 'px';
-        drag.style.top = e.pageY - shiftY + 'px';
-      }
-      document.onmousemove = function(e) {
-        moveAt(e);
-      };
-      drag.onmouseup = function() {
-        document.onmousemove = null;
-        drag.onmouseup = null;
-      };
+  addR: function (min, max, step, def, pos, css, el) {
+    let x = document.createElement("input");
+    if(typeof(el) == 'string') {elm = this.find(el);} else {elm = document.body;}
+    elm.appendChild(x);
+    x.setAttribute("type", "range");
+    if (typeof(min) == 'number') {} else {min = 0;}
+    x.setAttribute("min", min);
+    if (typeof(max) == 'number') {} else {max = 100;}
+    x.setAttribute("max", max);
+    if (typeof(step) == 'number') {} else {step = 1;}
+    x.setAttribute("step", step);
+    if (typeof(def) == 'number') {} else {def = min + (max-min)/2;}
+    x.setAttribute("value", def);
+    if (typeof(css) == 'string') {} else {css = 'rng';}
+    x.setAttribute("class", css);
+    if (pos) {x.style.transform = 'rotate(90deg)';}
+    elm.appendChild(x);
+    let p = document.createElement("p");
+    p.style.display = 'inline-block';
+    elm.appendChild(p);
+    p.innerHTML = x.value;
+    let c = document.createElement('style');
+    c.setAttribute('id', 'cssrange');
+    document.body.appendChild(c);
+    x.oninput = function() {
+      p.innerHTML = this.value;
+      let size = min+(max-min)*this.value/100;
+      c.innerHTML = '/*RANGE*/'+'.'+css+'::-webkit-slider-runnable-track{background-size: '+size+'%;}';
     }
-    drag.ondragstart = function() {
-      return false;
-    };
-    function getCoords(elem) {   // кроме IE8-
-      var box = elem.getBoundingClientRect();
-      return {
-        top: box.top + pageYOffset,
-        left: box.left + pageXOffset
-      };
-    }
+    let link = document.createElement('link');
+    link.href = '../range.css';
+    link.rel  = 'stylesheet';
+    link.type = 'text/css';
+    document.head.appendChild(link);
   }
 };
+//$ https://htmlcssphpjs.github.io/lib/
